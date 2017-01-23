@@ -3,6 +3,8 @@ const app = express();
 const nunjucks = require('nunjucks');
 const routes = require('./routes');
 const models = require('./models');
+const wikiRouter = require('./routes/wiki.js');
+const bodyParser = require('body-parser');
 
 var env = nunjucks.configure('views', { noCache: true });
 
@@ -10,17 +12,16 @@ app.set('view engine', 'html');
 
 app.engine('html', nunjucks.render);
 
-app.listen(3000, function() {
-	console.log('server connected');
-});
+app.use(express.static('public'));
+app.use('/wiki', wikiRouter);
 
-models.User.sync({})
+models.User.sync({ force: true })
 	.then(function() {
-		return models.Page.sync({});
+		return models.Page.sync({ force: true });
 	})
 	.then(function() {
-		console.log('Server is listening on port 3001!');
+		app.listen(3000, function() {
+		console.log('server connected');
+		});
 	})
 	.catch(console.error);
-
-app.use(express.static('public'));

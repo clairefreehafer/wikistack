@@ -3,7 +3,9 @@
 {% block content %}
   <h3>Pages</h3>
   <hr>
+  {% for page in pages %}
   <ul class="list-unstyled">
-    <!-- PLACEHOLDER LIST OF PAGES -->
+    <li><a href="{{ page.urlTitle }}">{{ page.title }}</a></li>
   </ul>
+  {% endfor %}
 {% endblock %}
